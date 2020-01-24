@@ -1,0 +1,58 @@
+$def with ( userdata ) 
+<!DOCTYPE html5 >
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ddiag.css">
+<title>DDiag - Diagnosis Lab Billing System</title>
+
+ <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+</head>
+<body>
+<!--
+<div id="dolphincontainer">
+<div id="dolphinnav">
+ <ul>
+  <li><a href="" title=""><span>Home</span></a></li>
+  <li><a href="" title="" class="current"><span>About Us</span></a></li>
+  <li><a href="" title=""><span>Services</span></a></li>
+  <li><a href="" title=""><span>Our Work</span></a></li>
+  <li><a href="" title=""><span>Contact Us</span></a></li>
+ </ul>
+</div>
+</div>
+-->
+
+<div id="banner" style="height:100px"></div>
+<div id="sidemenu"></div>
+<div id="content">
+<center>
+<form name="login" method="post" action="login" id="login">
+<table>
+<tr>
+<td><label>Username</label></td>
+<td><input type="text" name="username" value=""></td>
+</tr>
+<tr>
+<td><label>Password</label></td>
+<td><input type="password" name="passwd" value=""></td>
+</tr>
+<tr>
+<td colspan="2">
+<center><input type="submit" name="submit" value="Login"></center>
+</td>
+</tr>
+</table>
+</form>
+$if userdata["loggedin"] == True:
+	<h1>Welcome $userdata["username"]</h1>
+$else:
+	<h4 class="pdetails">D&amp;D Software, Medical Diagnosis Center Billing System</h4>
+	<center><img src="/static/images/ddcwords.png" /><br/>
+	Software by <img src="/static/images/danddsoft_small.png" /> &trade; 2015</center>
+</center>
+</div>
+</body>
+</html>

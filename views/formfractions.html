@@ -1,0 +1,44 @@
+<form name="subtest" method="post" action="/savesubtest">
+	  <table width="700px">
+		  <tr><td width='40%'>Category</td><td width='60%'><select name=categ>
+			                        $for i in userdata["categories"]:
+			                             <option value=$i["testcode"]>$i["testname"]</option>
+			                        </select></td></tr>
+	      <tr><td>Test Name</td><td><input type=text name=tname /></td></tr>
+	      <tr><td>Short Description</td><td><input type=text name=sdesc /></td></tr>
+	      <tr><td>Normal Values</td><td><input type=text name=norvalues /></td></tr>
+	      <tr><td>Amount</td><td><input type=text name=amt /></td></tr>
+	      <tr><td>Again</td><td><input type=radio name=again id=againy value="Y" />Yes <input type=radio name=again id=againn value="N" />No </td></tr>
+	      <tr><td>Add Subtests</td><td><input type=button name=subtests value=" Add " onClick="addSubtests();"></td></tr>
+	      <tr><td colspan=2><hr/></td></tr>
+	      <tr><td colspan=2><div id=sstestpanel ></div></td></tr>
+	      <tr><td colspan=2><hr/></td></tr>
+	      <tr><td><input type=submit name=submit value=" Save "></td><td><input type=reset name=reset value=" Cancel " ></td></tr>
+	      
+	  </table>
+</form>
+
+<hr/> 
+<hr/>
+<h3>Modify Test</h3>
+<form name="subtest" method="post" action="/modifysubtest">
+	  <table width="700px">
+		  <tr><td width='40%'>Test</td><td width='60%'><select name=subtest>
+			                        $for i in userdata["subtests"]:
+			                             <option value=$i["SUBTSTCODE"]>$i["STESTNAME"]</option>
+			                        </select></td></tr>
+	      <tr><td>Test Name</td><td><input type=text name=tname value='$i["STESTNAME"]'/></td></tr>
+	      <tr><td>Short Description</td><td><input type=text name=sdesc /></td></tr>
+	      <tr><td>Normal Values</td><td><input type=text name=norvalues value='$i["NOR_VALUE"]'/></td></tr>
+	      <tr><td>Amount</td><td><input type=text name=amt value='$i["amt"]'/></td></tr>
+	      <tr><td>Again</td><td><input type=radio name=again id=againy value="Y" />Yes <input type=radio name=again id=againn value="N" />No </td></tr>
+	      <tr><td>Add Subtests</td><td><input type=button name=subtests value=" Add " onClick="addSubtests();"></td></tr>
+	      <tr><td colspan=2><hr/></td></tr>
+	      <tr><td colspan=2><div id=sstestpanel ></div></td></tr>
+	      <tr><td colspan=2><hr/></td></tr>
+	      <tr><td><input type=submit name=submit value=" Save "></td><td><input type=reset name=reset value=" Cancel " ></td></tr>
+	      
+	  </table>
+</form>
+
+<hr/> 

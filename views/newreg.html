@@ -1,0 +1,75 @@
+$def with ( userdata )
+<!DOCTYPE html5>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ddiag.css">
+<title>DDiag - Diagnosis Lab Billing System</title>
+
+ <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+</head>
+<body>
+<base target="_parent">
+<center>
+<form name="registration" method="post" action="register" id="registration">
+<table>
+<tr>
+	<td><label>Patient ID</label></td>
+	<td><input type="text" name="pcode" id="pcode" value="...">
+	    <!-- <input type="button" value="Generate ID" onclick=""> -->
+	    <script> getNewPatientId(); </script>
+	</td>
+</tr>
+<tr>
+	<td><label>Patient Name</label></td>
+	<td><input type="text" name="pname" value=""></td>
+</tr>
+<tr>
+	<td><label>Age</label></td>
+	<td><input type="text" name="age" value=""></td>
+</tr>
+<tr>
+	<td><label>Sex</label></td>
+	<td><select name="sex">
+			<option value="M">Male</option>
+			<option value="F">Female</option>
+		</select>
+	</td>
+</tr>
+<tr>
+<td><label>Address</label></td>
+	<td><textarea name="address" rows="5" cols="30"> </textarea></td>
+</tr>
+<tr>
+	<td><label>Phone</label></td>
+	<td><input type="text" name="pphone" value="" size="20"></td>
+</tr>
+<tr>
+	<td><label>Referenced Doctor</label></td>
+	<td><input type="text" name="refdrname" value="" size="20"></td>
+</tr>
+<tr>
+	<td><label>Date of Admission</label></td>
+	<td><input type="date" name="doa" id="doa" size="20"  value="" > <script> document.getElementById('doa').valueAsDate = new Date(); </script></td>
+</tr>
+<tr>
+<td colspan="2">
+<center><input type="submit" name="submit" value="Register"></center>
+</td>
+</tr>
+</table>
+</form>
+<script type="text/javascript">
+                                         var frmvalidator  = new Validator("registration");
+                                         frmvalidator.addValidation("pcode","req","Patient Code is Required");
+                                         frmvalidator.addValidation("pcode","num","Patient Code must be numeric");
+                                         
+                                         frmvalidator.addValidation("pname","req","Patient Name Required");
+                                         frmvalidator.addValidation("age","req","Patient Age must be numeric");
+                                         frmvalidator.addValidation("pphone","req","Contact Phone number Required");
+                                         frmvalidator.addValidation("doa","req","Date of Admission Required");
+</script></center>
+</body>
+</html>

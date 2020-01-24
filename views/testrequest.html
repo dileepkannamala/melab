@@ -1,0 +1,240 @@
+$def with ( userdata ) 
+<!DOCTYPE html5>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ddiag.css">
+<link rel="stylesheet" type="text/css" href="/static/js/jquery-ui.css">
+<title>DDiag - Diagnosis Lab Billing System</title>
+
+ <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+ <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+</head>
+<body>
+	<base target="_parent"/>
+<!-- <h4 class="pdetails" style="height: 20px;">Test Request Form</h4> -->
+<form name="testrequest" method="post" action="addtestreq" >
+	<table>
+	<tr>
+		
+		<td colspan="2" width="900px">
+			<div id="pGrid" style="height: 150px"></div>
+			<script type="text/javascript">
+                              $$('#pGrid').w2grid({ 
+    name   : 'patientgrid', 
+	
+    keyboard : false,
+    show: { 
+            toolbar: true,
+            footer: true,
+            toolbarAdd: true,
+			toolbarDelete: true,
+			toolbarSave: false,
+			toolbarEdit: true
+        },
+        toolbar: {
+            items: [
+                { type: 'break' },
+               
+            ],
+		 
+		},
+		onSave: function(event) {
+		             
+		             event.onComplete = function() {
+				    
+					
+				}
+		        
+		        },
+		onEdit: function (event) {
+		        //alert(event.target + 'triggered');
+		        event.onComplete = function() {
+				    this.mergeChanges();
+					this.refresh();
+					
+					var sel = this.getSelection();
+					//alert( sel );
+					var data = this.get(sel);
+					var pdata = JSON.stringify(data);
+				    //alert( pdata );
+					jQuery.ajaxSetup({async:false});
+					$$.post('/savepatientdata',pdata, function (pdata, status ){
+						if (status == "success" )
+								{
+								
+									alert('Changes Saved');
+								}
+						}, "json"
+                     
+					);
+					jQuery.ajaxSetup({async:true});    
+					
+					
+				}
+				
+				
+				
+			},
+		
+		onAdd: function (event) {
+			  document.location.href='/newreg';
+		  },
+    columns: [                
+        { field: 'PCODE', caption: 'PatientID', size: '5%' },
+        { field: 'PNAME', caption: 'Name', size: '20%' ,editable: { type: 'text' }},
+        { field: 'ADDRESS', caption: 'Address', size: '30%',editable: { type: 'text' } },
+        { field: 'PPHONE', caption: 'Phone', size: '10%' ,editable: { type: 'text' }},
+        { field: 'SEX', caption: 'Sex', size: '5%',editable: { type: 'text' } },
+        { field: 'AGE', caption: 'Age', size: '5%' ,editable: { type: 'text' } },
+        { field: 'REF_DR_NAME', caption: 'Referenced By', size: '25%' ,editable: { type: 'text' }}
+        
+    ],
+    searches: [
+        { field: 'PCODE', caption: 'PatientID', type: 'text' },
+        { field: 'PNAME', caption: 'Name', type: 'text' },
+        { field: 'ADDRESS', caption: 'Address', type: 'text' },
+        { field: 'PPHONE', caption: 'Phone', type: 'text' },
+    ],
+    records: [
+       
+    ],
+    
+    onSelect: function(event) {
+                 event.onComplete = function () {
+                     var sel = this.getSelection();
+					
+					  
+                     detailshtml = "PatientID <b>"+  this.get(sel)["PCODE"] + "</b> ***  Patient Name: <b>" + this.get(sel)["PNAME"] +"</b>";
+                     document.getElementById("pdetails").innerHTML = detailshtml; 
+                     $$('#pdetails').effect( "bounce", "slow" );
+                     
+                     
+                     bills = patientBills( this.get(sel)["PCODE"] );
+                     //alert(bills);
+                     bills = JSON.parse(bills);
+                     detailshtml = "<h6 class='billhistory'>Bill History</h6><b>"+this.get(sel)["PNAME"]+"</b><br/><b>Patient ID:"+ this.get(sel)["PCODE"] +"</b>";
+                     detailshtml += "<font size=2><ul>";
+                     for( var i = 0; i < bills.length; i++ )
+				     {
+						 detailshtml += '<li></li><a href="javascript: loadBill(' + bills[i]["billid"] +');"> '+ bills[i]["billdate"] +' </a></li>';
+					 }
+					 detailshtml += "</ul></font>";
+					 
+                     $$('#helpbar', window.parent.document).html(detailshtml)  ;
+                     
+                     //.layout.content('right', detailshtml,'side-left');
+                     //console.log('selection:', sel);
+                 }
+				
+                
+        },
+    
+});
+    loadPData(); //loading all patient data into grid
+</script></td>
+</tr>
+<tr>
+	<td colspan="2">
+		<div width="900px" id="pdetails" name="pdetails" class="rpdetails">
+			*** Select Patient from above table ***
+		</div>
+	</td>
+</tr>
+<tr>
+	<td colspan="2"><hr/></td>
+</tr>
+<tr>
+	<td><label>Bill Date:</label></td><td><input type=date name=billdate id=billdate value="" />
+	    <script> document.getElementById('billdate').valueAsDate = new Date(); </script>
+    </td>
+</tr>
+<tr>
+	<td><label>Select Test</label></td>
+	<td><select name="tests" id="tests">
+		 $for i in userdata["options"]:
+			<option value="$i['SUBTSTCODE']|$i['AGAIN']|$i['amt']|$i['STESTNAME']">$i["STESTNAME"]</option>
+		</select> <input class="button" type="button" value="Add" onclick="addToCart();">
+	</td>
+</tr>
+<tr>
+	<td colspan="2"><hr/></td>
+</tr>
+
+<tr>
+	<td colspan="2">
+		<div id="myGrid" style="height: 250px" width="900px"></div>
+		<script type="text/javascript">
+    $$('#myGrid').w2grid({ 
+    name   : 'testcart', 
+    show: { 
+            toolbar: true,
+            footer: true
+        },
+        toolbar: {
+            items: [
+                { type: 'break' },
+                { type: 'button', id: 'my-delete', caption: 'Delete', icon: 'w2ui-icon-cross' }
+            ],
+            onClick: function () {
+                w2ui['testcart'].remove( w2ui['testcart'].getSelection() );
+                
+                
+            }
+        },
+    columns: [      
+        
+        { field: 'SUBTSTCODE', caption: 'TestCode', size: '30%' },
+        { field: 'STESTNAME', caption: 'Test Name', size: '30%' },
+        { field: 'amt', caption: 'Amount', size: '40%' },
+        
+    ],
+    records: [
+       
+    ],
+	onRefresh: function(event){
+	    var tot = 0;
+		for( t in this.records)
+		{
+		     tot += parseInt( this.records[t]["amt"]);
+		}
+		//alert('tot='+tot);
+		//console.log(tot);
+	    if (  $$("#discount").val() == undefined )
+		{
+		    discnt = 0;
+		}
+		else
+		{
+		    
+		    //discnt =  parseInt( $$("#discount").val() );
+		}
+		tot = tot;
+		$$('#totalval').html("Total :"+ tot);
+		
+	}
+			
+});
+                                                   
+</script></td>
+</tr>
+
+</table>
+    <input type=hidden id=billid name=billid value=0 />
+	Discount (Rs): <input type=text name=discount id=discount value=0 />
+	<input class="button" type="button" id="delbtn" name="delbtn" value="Delete BILL" onClick="deleteBill();">***<input class="button" type="button" id="printbtn" name="printbtn" value="Print BILL" onClick="printBill();">***<input class="button" type="button" id="savebtn" name="savebtn" value="Save Test Request" onClick="checkTestRequest();">
+	<b><div id="totalval"> Total : </div></b>
+</form>
+
+
+		
+
+<script type="text/javascript">
+                     //var frmvalidator  = new Validator("testrequest");
+                     //frmvalidator.addValidation("billdate","req","Bill Date is Required");
+                    
+</script>
+</body>
+</html>

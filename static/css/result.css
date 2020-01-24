@@ -1,0 +1,36 @@
+@page {
+			size: A4 portrait; /* can use also 'landscape' for orientation */
+			margin-top: 1.0in;
+			margin-bottom: 1.0in;
+			
+			@bottom-center {
+				content: element(footer);
+			}
+			
+			@top-center {
+				content: element(header);
+			}
+		}
+			
+#page-header {
+			display: block;
+			position: running(header);
+		}
+		
+#page-footer {
+			display: block;
+			position: running(footer);
+		}
+body {
+	margin-top: 0.5in;
+	margin-left: 0.5in;
+	margin-right: 0.5in;
+	margin-bottom: 0.5in;
+	
+	font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	
+	line-height: 20px;
+}

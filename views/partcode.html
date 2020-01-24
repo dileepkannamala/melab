@@ -1,0 +1,5 @@
+<label>Patient ID</label></td><td><input type=text name="pcode" id="pcode" value="..." />
+                             <select name="plist" id="plist" onchange="$$('#pcode').val( $$('#plist').val() );" size="5">
+							 $for j in userdata["patients"]:
+							      <option value="$j['PCODE']">$j["PNAME"] - [ Phone: $j["PPHONE"] ]</option>
+                             </select>  

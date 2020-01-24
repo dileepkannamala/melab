@@ -1,0 +1,47 @@
+$def with ( userdata ) 
+<!DOCTYPE html5>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ddiag.css">
+<title>DDiag - Diagnosis Lab Billing System</title>
+
+ <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+ <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+</head>
+<body>
+	<base target="_parent"/>
+<h4 class="pdetails" style="height: 20px;">User Management</h4>
+<script>
+    $$('#helpbar', window.parent.document).html('')   ; 
+</script>
+    
+    <fieldset>
+        <legend>Chanage Password</legend>
+        
+        <table>
+            <tr><td>Current User </td><td> $userdata["username"] <input type=hidden id=cuname name=cuname value=$userdata["username"] /></td></tr>
+            
+            <tr><td>Old Password </td><td><input type=password id=pass1 name=pass1 /> </td></tr>
+            <tr><td>New Password </td><td><input type=password id=pass2 name=pass2 /></td></tr>
+            <tr><td>Confirm Password</td><td><input type=password id=cpass2 name=cpass2 /></td></tr>
+            <tr><td colspan=2 align='right'><input type=button class="button" onClick="changePassword();" value="Change Password" />&nbsp;
+                  <input type=button class="button" onClick="cancelUser();" value="Remove User" />
+                
+                </td></tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>New User</legend>
+        <table>
+            <tr><td>User Name</td><td><input type=text id=nuname name=nuname /></td></tr>
+            <tr><td>User Type</td><td><select id=typ name=typ><option value="A">Administrator</option><option value="S">Staff</option></select></td></tr>
+            <tr><td>Password</td><td><input type=password id=npass1 name=npass1 /></td></tr>
+            <tr><td>Confirm Password</td><td><input type=password id=cnpass1 name=cnpass1 /></td></tr>
+            <tr><td colspan=2><input type=button class="button" onClick="newUserRegister();" value="Register" /></td></tr>
+        </table>
+    </fieldset>
+</body>
+</html>

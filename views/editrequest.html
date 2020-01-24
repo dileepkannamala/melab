@@ -1,0 +1,203 @@
+$def with ( userdata ) 
+<!DOCTYPE html5>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ddiag.css">
+<link rel="stylesheet" type="text/css" href="/static/js/jquery-ui.css">
+<title>DDiag - Diagnosis Lab Billing System</title>
+
+ <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+ <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+ 
+ <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+ <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+ <script type="text/javascript" src="/static/js/jspdf.js"></script>
+ <script type="text/javascript" src="/static/js/jspdf.plugin.png_support.js"></script>
+ <script type="text/javascript" src="/static/js/jspdf.plugin.from_html.js"></script>
+ <script type="text/javascript" src="/static/js/jspdf.plugin.addimage.js"></script>
+ 
+ <script type="text/javascript" src="/static/js/libs/Deflate/adler32cs.js"></script>
+	<script type="text/javascript" src="/static/js/libs/FileSaver.js/FileSaver.js"></script>
+	<script type="text/javascript" src="/static/js/libs/Blob.js/BlobBuilder.js"></script>
+
+	<script type="text/javascript" src="/static/js/plugins/addimage.js"></script>
+
+	<script type="text/javascript" src="/static/js/plugins/standard_fonts_metrics.js"></script>
+	<script type="text/javascript" src="/static/js/plugins/split_text_to_size.js"></script>
+	<script type="text/javascript" src="/static/js/plugins/from_html.js"></script>
+	<script type="text/javascript" src="/static/js/plugins/autoprint.js"></script>
+    <script type="text/javascript" src="/static/js/libs/png_support/png.js"></script>
+	<script type="text/javascript" src="/static/js/libs/png_support/zlib.js"></script>
+	
+</head>
+<body>
+	<base target="_parent"/>
+<h4 class="pdetails" style="height: 20px;">Modify/Enter Test Results</h4>
+<form name="editrequest" method="post" action="savetestresults" >
+	<table width="100%">
+	<tr>
+		
+		<td colspan="2" width="900px">
+			<div id="pGrid" style="height: 150px"></div>
+			<script type="text/javascript">
+    $$('#helpbar', window.parent.document).html('')   ;  
+                
+    $$('#pGrid').w2grid({ 
+    name   : 'billgrid', 
+    keyboard : false,
+    show: { 
+            toolbar: true,
+            footer: true
+        },
+        toolbar: {
+            items: [
+                { type: 'break' },
+                { type: 'button', id: 'my-delete', caption: 'Delete', icon: 'w2ui-icon-cross' }
+            ],
+            onClick: function () {
+                //w2ui['testcart'].remove( w2ui['testcart'].getSelection() );
+                
+                w2ui['resultpanel'].add ( w2ui['billgrid'].records );
+            }
+        },
+    columns: [                
+        { field: 'billdate', caption: 'Bill Date', size: '10%' , render: 'date'},
+        { field: 'billid', caption: 'BillNo', size: '10%' },
+        { field: 'pcode', caption: 'PatientID', size: '10%' },
+        { field: 'pname', caption: 'Name', size:'30%' },
+		{ field: 'address', caption: 'Address', size:'30%' },
+        { field: 'SEX', caption: 'Sex', size: '10%' },
+        { field: 'AGE', caption: 'Age', size: '10%' },
+        { field: 'REF_DR_NAME', caption: 'Referenced By', size: '20%' },
+		{ field: 'discount', caption: 'Discount', size:'10%'}
+        
+    ],
+    searches: [
+        { field: 'pcode', caption: 'PatientID', type: 'text' },
+        { field: 'pname', caption: 'Name', type: 'text' },
+        { field: 'billid', caption: 'Bill ID', type: 'text' },
+        { field: 'REF_DR_NAME', caption: 'Ref. Dr Name', type: 'text' },
+    ],
+    records: [
+       
+    ],
+    
+    onSelect: function(event) {
+                 event.onComplete = function () {
+                     var sel = this.getSelection();
+                     detailshtml = "PatientID <b>"+  this.get(sel)["pcode"] + "</b> ***  Patient Name: <b>" + this.get(sel)["pname"] +" Bill No:"+ this.get(sel)["billid"]+"</b>";
+                     document.getElementById("pdetails").innerHTML = detailshtml; 
+                     $$('#pdetails').effect( "bounce", "slow" );
+                     //console.log('selection:', sel);
+                     
+                     billid = this.get(sel)["recid"];
+					 
+                     
+					
+					 loadBillForm(billid);  
+					 this.select( billid );
+					 discount =  w2ui['billgrid'].get(sel)["discount"];		
+					 $$("#billid", window.frames['innerframes']).val(billid);
+	                 $$("#discount", window.frames['innerframes']).val(discount);
+					 
+					
+                 }
+                
+        },
+	
+    
+});
+    loadBillData(); //loading all patient data into grid
+    
+	$$("#billid", window.frames['innerframes']).val(billid);
+	w2ui["billgrid"].select(billid);
+	var sel = w2ui["billgrid"].getSelection();
+	discount = w2ui["billgrid"].get(sel)["discount"];
+	$$("#discount", window.frames['innerframes']).val(discount);
+</script></td>
+</tr>
+<tr>
+	<td colspan="2">
+		<div width="900px" id="pdetails" name="pdetails" class="pdetails">
+			*** Select Bill from above table ***
+		</div>
+	</td>
+</tr>
+<tr>
+	<td colspan="2"><hr/></td>
+</tr>
+<tr>
+	<td colspan="2"><hr/></td>
+</tr>
+<tr>
+	<td colspan="2">
+		<div id="myGrid" style="height: 250px" width="900px"></div>
+		<script type="text/javascript">
+    $$('#myGrid').w2grid({ 
+    name   : 'resultpanel', 
+    show: { 
+            toolbar: true,
+            footer: true
+        },
+        toolbar: {
+            items: [
+                { type: 'break' },
+                { type: 'button', id: 'my-delete', caption: 'Delete', icon: 'w2ui-icon-cross' }
+            ],
+            onClick: function () {
+                w2ui['resultpanel'].remove( w2ui['resultpanel'].getSelection() );
+                
+                
+            }
+        },
+    columns: [                
+        { field: 'SUBTSTCODE', caption: 'TestCode', size: '10%' },
+        { field: 'STESTNAME', caption: 'Test Name', size: '20%' },
+        { field: 'SSCODE',caption: 'Subtest Code',  size: '10%' },
+        { field: 'SSTESTNAME',caption: 'Subtest Name', size: '20%'},
+        { field: 'NOR_VALUE', caption: 'Normal Value', size:'10%'},
+        { field: 'UNIT', caption: 'Unit', size: '5%' },
+        { field: 'ACT_VAL',caption: 'Actual Value', size: '10%', editable:{type:'text',length:20} }
+        
+        
+    ],
+    records: [
+       
+    ]
+});
+        
+         loadBillForm(billid);       
+		 
+		 $$("#billid", window.frames['innerframes']).val(billid);
+		 w2ui["billgrid"].select(billid);
+	     var sel = w2ui["billgrid"].getSelection();
+	     discount = w2ui["billgrid"].get(sel)["discount"];
+	     $$("#discount", window.frames['innerframes']).val(discount)  
+		
+		
+         //document.getElementById('billid').setAttribute('value', billid);
+		 //document.getElementById('discount').setAttribute('value',discount);
+         
+            
+</script></td>
+</tr>
+
+</table>
+    <input type=hidden name=discount id=discount value=0 />
+    <input type=hidden name=billid id=billid value=0 />
+</form>
+
+		<center><input class="button" type="button" id="printbill" name="printbill" value="Print Bill" onClick="printBill('lab');">***...***<input class="button" type="button" id="printbtn" name="printbtn" value="Print Result" onClick="printResults();">***...***<input class="button" type="button" id="savebtn" name="savebtn" value="Save Result" onClick="saveResults();"></center>
+		
+
+<script type="text/javascript">
+                    // var frmvalidator  = new Validator("testrequest");
+                    
+</script>
+</body>
+</html>

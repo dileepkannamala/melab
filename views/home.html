@@ -1,0 +1,117 @@
+$def with ( userdata )
+<!DOCTYPE html5 >
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ddiag.css">
+<title>DDiag - Diagnosis Lab Billing System</title>
+
+ <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+</head>
+<body>
+<!--
+
+<div id="menu8">
+  <ul>
+    <li><a href="#1" title="Home">Home</a></li>
+    <li><a href="#2" title="About">About</a></li>
+    <li><a href="#3" title="Services">Services</a></li>
+    <li><a href="#4" title="Portfolio">Portfolio</a></li>
+    <li><a href="#5" title="Store">Store</a></li>
+    <li><a href="#6" title="Download">Download Menu</a></li>
+  </ul>
+</div>
+-->	
+	
+	
+	
+<div id="layout" style="height: 700px;" width="100%"></div>
+<script type="text/javascript">
+                var  username = "$userdata['username']";
+                //var username = "dileep";
+        
+</script>
+<script type="text/javascript">
+$$('#helpbar', window.parent.document).html('');  
+$$('#layout').w2layout({
+    name: 'layout',
+    panels: [
+       
+        { type: 'left', size: 200, height:1200, resizable: true, style: 'background-color: #F7F6F7;', content: 'left' },
+        { type: 'main', style: 'background-color: #F5F6F7; padding: 5px;', content: '<iframe src="/testreq" id="innerframe" name="innerframe" width="920" height="1200"><\/iframe>' },
+        { type: 'right', size: 150, resizable: true, style: 'background-color: #F7F6F7;', content: '<div id="helpbar"></div>'}
+    ]
+});
+
+// then define the sidebar
+w2ui['layout'].content('left', $$().w2sidebar({
+        name: 'sidebar',
+        img: 'icon-page',
+        style: 'height:650px',
+        topHTML: '<img align="center" width="200" height="80" src="/static/images/ddc.png" style="float:left" /><br/><br/><br/><br/><br/>',
+        bottomHTML: '<img src="/static/images/danddsoft_small.png" width=150 height=150 />',
+        nodes: [ 
+                { id: 'register', text: 'Registration', img: 'icon-folder', expanded: true, group: true,
+                  nodes: [ 
+                               { id: 'newreg', text: 'New', img: 'icon-page' },
+                               { id: 'testreq', text: 'Test Request', img : 'icon-page' }
+                              
+                         ]
+                },
+                { id: 'reports', text: 'Reports', img: 'icon-folder', expanded: true, group: true,
+                  nodes: [ 
+                                           { id: 'editresult', text: 'Result Entry', img: 'icon-page' },
+                                           { id: 'dailyreport', text: 'Daily Report', img: 'icon-page' }
+                      
+                                       
+                            
+                         ]
+                },
+                { id: 'admin', text: 'Adminstration', img: 'icon-folder', expanded: true, group: true,
+                  nodes: [        // { id: 'addtest', text: 'Add/Configure Tests', img: 'icon-page' },
+                                   { id: 'usermgt', text: 'User Management', img: 'icon-page' },
+                                  // { id: 'viewlog', text: 'View Logs', img: 'icon-page' },
+                                  // { id: 'backup', text: 'Backup', img: 'icon-page' }
+                                 ]
+                },
+                { id: 'logout', text: 'Logout [ '+username +' ]', img: 'icon-page', expanded: true }
+                
+        ],
+        onClick: function (event) {
+                switch ( event.target )
+                {
+                        case 'logout':
+                                          w2ui['layout'].load('main','/logout','side-left');
+                                          break;
+                        case 'newreg':
+                                          w2ui['layout'].content('main','<iframe src="/newreg" id="innerframe" name="innerframe" width="920" height="650"><\/iframe>','side-left');
+                                          break;
+						case 'testreq':
+										  w2ui['layout'].content('main','<iframe src="/testreq" id="innerframe" name="innerframe" width="920" height="1200"><\/iframe>','side-left');
+										  break;
+						case 'editresult':
+										   w2ui['layout'].content('main','<iframe src="/editresult" id="innerframe" name="innerframe" width="920" height="1200"><\/iframe>','side-left');
+										   break;
+						//case 'addtest':
+						//				   w2ui['layout'].content('main','<iframe src="/addconftests" id="innerframe" name="innerframe" width="920" height="1200"><\/iframe>','side-left');
+						//				   break;
+						case 'usermgt':
+										   w2ui['layout'].content('main','<iframe src="/usermanagement" id="innerframe" name="innerframe" width="920" height="1200"><\/iframe>','side-left');
+										   break;
+                    case 'dailyreport':
+                                            w2ui['layout'].content('main','<iframe src="/dailyreport" id="innerframe" name="innerframe" width="920" height="1200"><\/iframe>','side-left');
+										   break;
+						
+                        default:
+                                          //w2ui['layout'].content('main', 'id: ' + event.target);
+                                          //break;
+										  w2ui['layout'].content('main','<iframe src="/testreq" id="innerframe" name="innerframe" width="920" height="1200"><\/iframe>','side-left');
+										  break;
+                }
+        }
+}));
+</script>
+</body>
+</html>

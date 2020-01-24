@@ -1,0 +1,90 @@
+$def with ( userdata ) 
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/ddiag.css">
+<title>DDiag - Diagnosis Lab Billing System</title>
+
+ <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/static/js/w2ui-1.4.3.min.js"></script>
+ <script type="text/javascript" src="/static/js/helper.js"></script>
+ <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+</head>
+<body>
+	<base target="_parent"/>
+<h4 class="pdetails" style="height: 20px;">Tests and Configurations</h4>
+<hr/>
+
+
+<form name="addcateg" method=post action="/addcategory">
+    <fieldset>
+        <legend>New Category</legend>
+    <label for=category>Category </label><input type=text name=category id=category />
+    <input type=submit name=submit value="Create" />
+    <p>Available Categories</p>
+    <ul>
+    $for i in userdata["categories"]:
+        <li>$i["testname"]</li>
+    </ul>
+    </fieldset>
+</form>
+<form name="addtest" method=post action="/addtest">
+    <fieldset>
+        <legend>New Test</legend>
+    <label for=category>Category </label>
+    <select name=category id=category onclick='loadTests(event);'>
+    
+    $for i in userdata["categories"]:
+        <option value="$i['recid']" >$i["testname"]</option>
+    </select> 
+    </fieldset>
+    <center>
+    <div id='grid1' style="position: absolute; left: 0px; width: 95%; height: 300px;"></div>
+    </center>
+    <script type="text/javascript">
+    
+    $$('#helpbar', window.parent.document).html('')   ;  
+
+    $$('#grid1').w2grid({ 
+        name: 'grid1', 
+        header: 'Master',
+        show: { toolbar: true,header: true},
+        toolbar: {
+              items: [
+                  { type: 'button', caption: 'Delete', id:'deltest'},
+                  { type: 'button', caption: 'Add' , id:'addtest'},
+                  { type: 'button', caption: 'Subtests', id:'addsubtest' },
+                  { type: 'button', caption: 'Save', id:'savetest' }
+              ],
+            onClick: function( target, data ) { 
+                switch ( target )
+                {
+                    case 'deltest': w2alert('Del');break;
+                    case 'addtest': w2alert('Add');break;
+                    case 'addsubtest': w2alert('Add SubTest');break;
+                    case 'savetest': w2alert('Save'); break;
+                }
+            }
+        },
+        columns: [                
+            { field: 'recid', caption: 'ID', size: '50px', sortable: true, attr: 'align=center' },
+            { field: 'STESTNAME', caption: 'Test Name', size: '30%', sortable: true, editable: {type:'text'} },
+            { field: 'NOR_VALUE', caption: 'Normal Value', size: '30%', sortable: true, editable: {type:'text'} },
+            { field: 'amt', caption: 'Amount', size: '40%' , editable: {type:'int'}},
+            { field: 'AGAIN', caption: 'AGAIN', size: '60px', editable: {type:'text'} },
+        ],
+        records: [ ],      
+       
+        onClick: function (event) { 
+          
+        }
+    });
+
+        </script>
+
+    
+    
+</form>
+</body>
+</html>
